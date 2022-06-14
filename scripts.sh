@@ -36,10 +36,10 @@ merge_release_into_master(){
     select opt in "Yes" "No"; do
         case $opt in
             Yes)
-                git checkout $first_release
-                git pull
-                
-                git merge --no-ff $first_release
+                git checkout $first_release -q
+                git pull -q
+                git merge --no-ff $first_release -q
+                git checkout main -q
                 echo "${GREEN}Done${NC}"
                 break;;
             No ) 
