@@ -14,8 +14,13 @@ create_release_branch(){
     git push --set-upstream origin $branch
 }
 
+list_branches_with_prefix(){
+    prefix='feature'
+    git branch -a | grep $prefix
+}
+
 PS3="Please choose an option: "
-options=("Create release branch" "Quit")
+options=("Create release branch" "Merge release branch" "Quit")
 select opt in "${options[@]}"
 do 
    case $opt in
@@ -30,6 +35,9 @@ do
             # Create release branch w/ new version name
             create_release_branch
             echo "${GREEN}Done${NC}"
+            break
+            ;;
+        "Merge release branch")
             break
             ;;
         "Quit")
