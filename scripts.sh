@@ -14,9 +14,37 @@ create_release_branch(){
     git push --set-upstream origin $branch
 }
 
-list_branches_with_prefix(){
-    prefix='feature'
-    git branch -a | grep $prefix
+merge_release_into_master(){
+    prefix='release'
+    # Get all branches with prefix
+    release_branch=$(git branch -a | grep $prefix)
+
+    # Exit if there's no release branch
+    if [ -z "$release_branch" ]; then
+        echo "No release branch found"
+        exit 1
+    fi
+
+    # Get first release branch
+    first_release=$(echo $release_branch | sed 's/ .*//')
+
+    # Prompt user to confirm
+    echo "Merge ${GREEN}$first_release${NC} into master?"
+    select opt in "Yes" "No"; do
+        case $opt in
+            Yes)
+                git checkout $first_release
+                git pull
+                git checkout master
+                git pull
+                git merge --no-ff $first_release
+                echo "${GREEN}Done${NC}"
+                break;;
+            No ) 
+                exit;;
+            *) echo "invalid option $REPLY";;
+        esac
+    done
 }
 
 PS3="Please choose an option: "
@@ -38,6 +66,7 @@ do
             break
             ;;
         "Merge release branch")
+            merge_release_into_master
             break
             ;;
         "Quit")
