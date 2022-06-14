@@ -51,7 +51,7 @@ merge_release_into_master(){
 }
 
 PS3="Please choose an option: "
-options=("Create release branch" "Merge release branch" "Quit")
+options=("Create release branch" "Merge release branch" "Perform post-release" "Quit")
 select opt in "${options[@]}"
 do 
    case $opt in
@@ -72,6 +72,8 @@ do
             merge_release_into_master
             break
             ;;
+        "Perform post-release")
+            break;;
         "Quit")
             break
             ;;
