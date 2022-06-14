@@ -15,6 +15,9 @@ create_release_branch(){
 }
 
 merge_release_into_master(){
+    git checkout main -q
+    git pull -q
+
     prefix='release'
     # Get all branches with prefix
     release_branch=$(git branch -a | grep $prefix)
@@ -34,8 +37,6 @@ merge_release_into_master(){
         case $opt in
             Yes)
                 git checkout $first_release
-                git pull
-                git checkout master
                 git pull
                 git merge --no-ff $first_release
                 echo "${GREEN}Done${NC}"
