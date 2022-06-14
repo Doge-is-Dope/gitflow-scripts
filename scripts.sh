@@ -15,7 +15,8 @@ create_release_branch(){
 }
 
 merge_release_into_master(){
-    
+    git checkout main -q
+    git pull -q
 
     prefix='release'
     # Get all branches with prefix
@@ -38,7 +39,6 @@ merge_release_into_master(){
                 git checkout $first_release -q
                 git pull -q
                 git checkout main -q
-                git pull -q
                 git merge --no-ff $first_release -q
                 git push -q
                 echo "${GREEN}Done${NC}"
