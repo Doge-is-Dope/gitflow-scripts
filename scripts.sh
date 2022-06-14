@@ -39,9 +39,7 @@ merge_release_into_master(){
                 git checkout $first_release -q
                 git pull -q
                 git checkout main -q
-                git status
-                echo $first_release
-                git merge --no-ff $first_release
+                git merge --no-ff $first_release -m "Merge $first_release into master" -q
                 git push -q
                 echo "${GREEN}Done${NC}"
                 break;;
