@@ -15,8 +15,8 @@ create_release_branch(){
 }
 
 merge_release_into_master(){
-    git checkout main
-    git pull
+    git checkout main -q
+    git pull -q
 
     prefix='release'
     # Get all branches with prefix
