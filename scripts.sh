@@ -5,7 +5,7 @@ NC=$(tput sgr0)
 
 create_release_branch(){
     branch=release/$new_ver
-    git checkout develop
+    git checkout dev
     git pull
     git checkout -b $branch
     sed -i '' 's/default:.*/default: '\"$new_ver\"'/' $file
@@ -14,7 +14,7 @@ create_release_branch(){
     git push --set-upstream origin $branch
 }
 
-merge_release_into_master(){
+merge_release_into_main(){
     git checkout main -q
     git pull -q
 
@@ -32,14 +32,14 @@ merge_release_into_master(){
     first_release=$(echo $release_branch | sed 's/ .*//')
 
     # Prompt user to confirm
-    echo "Merge ${GREEN}$first_release${NC} into master?"
+    echo "Merge ${GREEN}$first_release${NC} into main?"
     select opt in "Yes" "No"; do
         case $opt in
             Yes)
                 git checkout $first_release -q
                 git pull -q
                 git checkout main -q
-                git merge --no-ff $first_release -m "Merge $first_release into master" -q
+                git merge --no-ff $first_release -m "Merge $first_release into main" -q
                 git push -q
                 echo "${GREEN}Done${NC}"
                 break;;
@@ -61,10 +61,10 @@ post_release(){
     git push origin $tag_ver -q
     echo "${GREEN}Done${NC}"
 
-    echo "Merging master into dev......\c"
+    echo "Merging main into dev......\c"
     git switch dev -q
     git pull -q
-    git merge --no-ff main -m "Merge master into develop" -q
+    git merge --no-ff main -m "Merge main into develop" -q
     git push -q
     echo "${GREEN}Done${NC}"
 }
@@ -88,7 +88,7 @@ do
             break
             ;;
         "Merge release branch")
-            merge_release_into_master
+            merge_release_into_main
             break
             ;;
         "Perform post-release")
