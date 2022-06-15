@@ -51,11 +51,22 @@ merge_release_into_master(){
 }
 
 
-test(){
-    echo $new_ver
-    git switch main
-    git pull
-    # git tag -a $new_ver
+post_release(){
+    read -p "Enter version name for tag: " tag_ver
+    
+    echo "Creating tag ${RED}$tag_ver${NC}......\c"
+    git switch main -q
+    git pull -q
+    git tag $tag_ver
+    git push origin $tag_ver -q
+    echo "${GREEN}Done${NC}"
+
+    echo "Merging master into dev......\c"
+    git switch dev -q
+    git pull -q
+    git merge --no-ff main -m "Merge master into develop" -q
+    git push -q
+    echo "${GREEN}Done${NC}"
 }
 
 PS3="Please choose an option: "
@@ -80,11 +91,9 @@ do
             merge_release_into_master
             break
             ;;
-
         "Perform post-release")
-            test
-            break
-            ;;
+            post_release
+            break;;
         "Quit")
             break
             ;;
