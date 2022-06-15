@@ -50,8 +50,16 @@ merge_release_into_master(){
     done
 }
 
+
+test(){
+    echo $new_ver
+    git switch main
+    git pull
+    # git tag -a $new_ver
+}
+
 PS3="Please choose an option: "
-options=("Create release branch" "Merge release branch" "Quit")
+options=("Create release branch" "Merge release branch" "Perform post-release" "Quit")
 select opt in "${options[@]}"
 do 
    case $opt in
@@ -70,6 +78,11 @@ do
             ;;
         "Merge release branch")
             merge_release_into_master
+            break
+            ;;
+
+        "Perform post-release")
+            test
             break
             ;;
         "Quit")
