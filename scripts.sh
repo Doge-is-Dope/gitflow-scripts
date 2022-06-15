@@ -50,6 +50,25 @@ merge_release_into_master(){
     done
 }
 
+
+post_release(){
+    read -p "Enter version name for tag: " tag_ver
+    
+    echo "Creating tag ${RED}$tag_ver${NC}......\c"
+    git switch main -q
+    git pull -q
+    git tag $tag_ver
+    git push origin $tag_ver -q
+    echo "${GREEN}Done${NC}"
+
+    echo "Merging master into dev......\c"
+    git switch dev -q
+    git pull -q
+    git merge --no-ff main -m "Merge master into develop" -q
+    git push -q
+    echo "${GREEN}Done${NC}"
+}
+
 PS3="Please choose an option: "
 options=("Create release branch" "Merge release branch" "Perform post-release" "Quit")
 select opt in "${options[@]}"
@@ -73,6 +92,7 @@ do
             break
             ;;
         "Perform post-release")
+            post_release
             break;;
         "Quit")
             break
